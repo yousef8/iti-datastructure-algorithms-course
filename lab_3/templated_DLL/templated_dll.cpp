@@ -158,20 +158,84 @@ public:
 
     return nullptr;
   }
+
+  void erase(const T &value)
+  {
+    const Node<T> *node_to_delete = search(value);
+
+    // No match found
+    if (!node_to_delete)
+    {
+      return;
+    }
+
+    // Match found
+    if (head == node_to_delete)
+    {
+      head = node_to_delete->nxt;
+    }
+
+    if (tail == node_to_delete)
+    {
+      tail = node_to_delete->prv;
+    }
+
+    link(node_to_delete->prv, node_to_delete->nxt);
+    --size;
+    delete node_to_delete;
+
+    debug_verify_data_integrity();
+    return;
+  }
 };
+
+template <typename T>
+void test_deletion(DLL<T> dll)
+{
+  std::cout << "\n-------------Deletion Feature------------------\n";
+  std::cout << "Original DLL : \n";
+  dll.display();
+  std::cout << std::endl;
+
+  // Test Delete Feature
+  // Delete Middle
+  std::cout << "Delete Middle Element : \n";
+  dll.erase("omar");
+  dll.display();
+  std::cout << std::endl;
+
+  // Delete Head
+  std::cout << "Delete Head Element : \n";
+  dll.erase("yousef");
+  dll.display();
+  std::cout << std::endl;
+
+  // Delete Tail
+  std::cout << "Delete Tail Element : \n";
+  dll.erase("muhammed");
+  dll.display();
+  std::cout << std::endl;
+
+  return;
+}
 
 int main()
 {
-  DLL<std::string> dll{"yousef", "omar", "muhammed"};
 
+  // Test Add, Display, and Constructor feature
+  std::cout << "\n------------------------Create DLL && Add elements-------------------\n";
+  DLL<std::string> dll{"yousef", "omar", "muhammed"};
   dll.display();
 
+  // Test copy Costructor
+  std::cout << "\n---------------------------Copy DLL------------------------------\n";
   DLL<std::string> dllCpy{dll};
-
+  std::cout << "Copied DLL : \n";
   dllCpy.display();
 
+  // Test Search feature
+  std::cout << "\n---------------------Search Feature-----------------\n";
   const Node<std::string> *res = dll.search("yousef");
-
   if (!res)
   {
     std::cout << "Didn't find anything\n";
@@ -180,6 +244,9 @@ int main()
   {
     std::cout << "Found a node with value " << res->data << std::endl;
   }
+  std::cout << std::endl;
+
+  test_deletion(dll);
 
   return 0;
 }

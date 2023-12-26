@@ -145,6 +145,19 @@ public:
 
     std::cout << "NULL\n";
   }
+
+  const Node<T> *search(const T &value)
+  {
+    for (Node<T> *cur{head}; cur; cur = cur->nxt)
+    {
+      if (cur->data == value)
+      {
+        return cur;
+      }
+    }
+
+    return nullptr;
+  }
 };
 
 int main()
@@ -156,6 +169,17 @@ int main()
   DLL<std::string> dllCpy{dll};
 
   dllCpy.display();
+
+  const Node<std::string> *res = dll.search("yousef");
+
+  if (!res)
+  {
+    std::cout << "Didn't find anything\n";
+  }
+  else
+  {
+    std::cout << "Found a node with value " << res->data << std::endl;
+  }
 
   return 0;
 }

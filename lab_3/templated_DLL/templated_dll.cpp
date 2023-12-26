@@ -146,7 +146,7 @@ public:
     std::cout << "NULL\n";
   }
 
-  const Node<T> *search(const T &value)
+  Node<T> *search(const T &value)
   {
     for (Node<T> *cur{head}; cur; cur = cur->nxt)
     {
@@ -187,6 +187,31 @@ public:
     debug_verify_data_integrity();
     return;
   }
+
+  void insert_after(const T &search_value, const T &new_value)
+  {
+    Node<T> *node_found = search(search_value);
+
+    // No match found
+    if (!node_found)
+    {
+      return;
+    }
+
+    Node<T> *new_node = new Node<T>{new_value};
+
+    link(new_node, node_found->nxt);
+    link(node_found, new_node);
+
+    if (tail == node_found)
+    {
+      tail = tail->nxt;
+    }
+    ++size;
+
+    debug_verify_data_integrity();
+    return;
+  }
 };
 
 template <typename T>
@@ -219,6 +244,29 @@ void test_deletion(DLL<T> dll)
   return;
 }
 
+template <typename T>
+void test_insert_after(DLL<T> dll)
+{
+  std::cout << "\n----------------Test Insertion After Value--------------------\n";
+  std::cout << "Current DLL : ";
+  dll.display();
+
+  std::cout << "\nInsert after head: \n";
+  dll.insert_after("yousef", "mahmoud");
+  dll.display();
+
+  std::cout << "\nInsert after tail: \n";
+  dll.insert_after("muhammed", "mazen");
+  dll.display();
+
+  std::cout << "\nInsert in middle: \n";
+  dll.insert_after("mahmoud", "fathi");
+  dll.display();
+  std::cout << std::endl;
+
+  return;
+}
+
 int main()
 {
 
@@ -228,7 +276,8 @@ int main()
   dll.display();
 
   // Test copy Costructor
-  std::cout << "\n---------------------------Copy DLL------------------------------\n";
+  std::cout
+      << "\n---------------------------Copy DLL------------------------------\n";
   DLL<std::string> dllCpy{dll};
   std::cout << "Copied DLL : \n";
   dllCpy.display();
@@ -248,5 +297,6 @@ int main()
 
   test_deletion(dll);
 
+  test_insert_after(dll);
   return 0;
 }

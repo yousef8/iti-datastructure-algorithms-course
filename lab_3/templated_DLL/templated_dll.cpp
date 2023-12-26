@@ -17,6 +17,11 @@ public:
   Node(const T &_data) : data{_data}, nxt{nullptr}, prv{nullptr}
   {
   }
+
+  ~Node()
+  {
+    std::cout << "Destroy value [" << data << "] at address [" << this << "]\n";
+  }
 };
 
 template <typename T>
@@ -97,6 +102,19 @@ public:
     for (Node<T> *cur{other.head}; cur; cur = cur->nxt)
     {
       add(cur->data);
+    }
+  }
+
+  ~DLL()
+  {
+    Node<T> *node_to_delete = nullptr;
+    Node<T> *cur{head};
+
+    while (cur)
+    {
+      node_to_delete = cur;
+      cur = cur->nxt;
+      delete node_to_delete;
     }
   }
 

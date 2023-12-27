@@ -57,7 +57,7 @@ public:
   {
     for (const T &e : lst)
     {
-      add(e);
+      append(e);
     }
   }
 
@@ -65,7 +65,7 @@ public:
   {
     for (Node<T> *cur{other.head}; cur; cur = cur->nxt)
     {
-      add(cur->data);
+      append(cur->data);
     }
   }
 
@@ -82,7 +82,7 @@ public:
     }
   }
 
-  void add(const T &data)
+  void append(const T &data)
   {
     Node<T> *node = new Node<T>{data};
     link(tail, node);
@@ -178,7 +178,7 @@ public:
     // Handle insertion in empty DLL
     if (0 == idx && 0 == size)
     {
-      add(new_value);
+      append(new_value);
       return;
     }
 

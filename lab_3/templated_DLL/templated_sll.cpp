@@ -85,6 +85,11 @@ public:
     return;
   }
 
+  bool is_empty()
+  {
+    return (head == nullptr && tail == nullptr);
+  }
+
 private:
   Node<T> *head;
   Node<T> *tail;
@@ -121,6 +126,7 @@ int main()
   std::cout << "------------------Create SLL & Add Elements---------------------\n";
   SLL<std::string> sll{"yousef", "omar", "muhammed"};
   sll.display();
+  std::cout << "Is Empty : " << (sll.is_empty() ? "True" : "False") << "\n";
   std::cout << std::endl;
 
   return 0;

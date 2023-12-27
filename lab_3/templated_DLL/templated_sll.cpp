@@ -173,6 +173,30 @@ public:
     return true;
   }
 
+  void reverse()
+  {
+    Node<T> *prv_node{nullptr};
+    Node<T> *cur_node{head};
+    Node<T> *nxt_node{nullptr};
+    while (cur_node)
+    {
+      // Secure access to next node
+      nxt_node = cur_node->nxt;
+
+      // Reverse the node
+      cur_node->nxt = prv_node;
+
+      // Advance the current and previous nodes
+      prv_node = cur_node;
+      cur_node = nxt_node;
+    }
+
+    std::swap(head, tail);
+
+    debug_verify_data_integrity();
+    return;
+  }
+
 private:
   Node<T> *head;
   Node<T> *tail;
@@ -256,6 +280,21 @@ void test_search(const SLL<T> &sll)
 
   return;
 }
+
+template <typename T>
+void test_reverse(SLL<T> sll)
+{
+  std::cout << "------------------Reverse Functionality---------------------\n";
+  std::cout << "Current SLL  : ";
+  sll.display();
+  std::cout << std::endl;
+
+  sll.reverse();
+  std::cout << "Reversed SLL : ";
+  sll.display();
+  std::cout << std::endl;
+  return;
+}
 int main()
 {
   std::cout << "------------------Create SLL & Add Elements---------------------\n";
@@ -272,6 +311,8 @@ int main()
 
   test_search(sll);
   test_deletion(sll);
+
+  test_reverse(sll);
 
   return 0;
 }

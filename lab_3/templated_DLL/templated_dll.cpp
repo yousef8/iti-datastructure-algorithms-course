@@ -48,6 +48,42 @@ private:
     return;
   }
 
+  void debug_verify_data_integrity()
+    {
+      int length = size;
+      if (length == 0)
+      {
+        assert(head == nullptr);
+        assert(tail == nullptr);
+      }
+      else
+      {
+        assert(head != nullptr);
+        assert(tail != nullptr);
+        if (length == 1)
+          assert(head == tail);
+        else
+          assert(head != tail);
+        assert(!head->prv);
+        assert(!tail->nxt);
+      }
+      int len = 0;
+      for (Node<T> *cur{head}; cur; cur = cur->nxt, len++)
+      {
+        if (len == length - 1) // make sure we end at tail
+          assert(cur == tail);
+      }
+
+      assert(length == len);
+      // assert(length == (int)debug_data.size());
+
+      len = 0;
+      for (Node<T> *cur = tail; cur; cur = cur->prv, len++)
+      {
+        if (len == length - 1) // make sure we end at head
+          assert(cur == head);
+      }
+    }
 public:
   DLL() : head{nullptr}, tail{nullptr}, size{0}
   {
@@ -67,6 +103,7 @@ public:
     {
       append(cur->data);
     }
+    debug_verify_data_integrity();
   }
 
   ~DLL()
@@ -95,6 +132,35 @@ public:
     tail = node;
 
     ++size;
+    debug_verify_data_integrity();
+    return;
+  }
+
+  T delete_back() {
+    if(head == nullptr && tail == nullptr){
+      return T{};
+    }
+
+    Node<T>* node_to_delete = tail;
+    T data = tail->data;
+
+    tail = tail->prv;
+
+    if (head == node_to_delete)
+    {
+      head = node_to_delete->nxt;
+    }
+
+    if(tail){
+      tail->nxt = nullptr;
+    }
+
+  
+    --size;
+    delete node_to_delete;
+    debug_verify_data_integrity();
+
+    return data;
   }
 
   void display()
@@ -117,7 +183,8 @@ public:
         return cur;
       }
     }
-
+    
+    debug_verify_data_integrity();
     return nullptr;
   }
 
@@ -146,6 +213,7 @@ public:
     --size;
     delete node_to_delete;
 
+    debug_verify_data_integrity();
     return;
   }
 
@@ -170,6 +238,7 @@ public:
     }
     ++size;
 
+    debug_verify_data_integrity();
     return;
   }
 
@@ -204,6 +273,7 @@ public:
 
     ++size;
 
+    debug_verify_data_integrity();
     return;
   }
 
@@ -217,6 +287,7 @@ public:
     }
 
     std::swap(head, tail);
+    debug_verify_data_integrity();
     return;
   }
 };
@@ -314,6 +385,39 @@ void test_reverse(DLL<T> dll)
   std::cout << std::endl;
 }
 
+template<typename T>
+void test_delete_back(DLL<T> dll){
+  std::cout << "\n-------------Deletion From End Feature------------------\n";
+  std::cout << "Original DLL : \n";
+  dll.display();
+  std::cout << std::endl;
+
+  // Test Delete Feature
+  // Delete Middle
+  std::cout << "Delete Tail: \n";
+  T res = dll.delete_back();
+  std::cout << "You just deleted " << res << "\n";
+  dll.display();
+  std::cout << std::endl;
+
+  // Delete Head
+  std::cout << "Delete Tail: \n";
+  res = dll.delete_back();
+  std::cout << "You just deleted " << res << "\n";
+  dll.display();
+  std::cout << std::endl;
+
+  // Delete Tail
+  std::cout << "Delete Tail: \n";
+  res = dll.delete_back();
+  std::cout << "You just deleted " << res << "\n";
+  dll.display();
+  std::cout << std::endl;
+
+  return;
+
+}
+
 int main()
 {
 
@@ -322,32 +426,34 @@ int main()
   DLL<std::string> dll{"yousef", "omar", "muhammed"};
   dll.display();
 
-  // Test copy Costructor
-  std::cout
-      << "\n---------------------------Copy DLL------------------------------\n";
-  DLL<std::string> dllCpy{dll};
-  std::cout << "Copied DLL : \n";
-  dllCpy.display();
+  // // Test copy Costructor
+  // std::cout
+  //     << "\n---------------------------Copy DLL------------------------------\n";
+  // DLL<std::string> dllCpy{dll};
+  // std::cout << "Copied DLL : \n";
+  // dllCpy.display();
 
-  // Test Search feature
-  std::cout << "\n---------------------Search Feature-----------------\n";
-  const Node<std::string> *res = dll.search("yousef");
-  if (!res)
-  {
-    std::cout << "Didn't find anything\n";
-  }
-  else
-  {
-    std::cout << "Found a node with value " << res->data << std::endl;
-  }
-  std::cout << std::endl;
+  // // Test Search feature
+  // std::cout << "\n---------------------Search Feature-----------------\n";
+  // const Node<std::string> *res = dll.search("yousef");
+  // if (!res)
+  // {
+  //   std::cout << "Didn't find anything\n";
+  // }
+  // else
+  // {
+  //   std::cout << "Found a node with value " << res->data << std::endl;
+  // }
+  // std::cout << std::endl;
 
-  test_deletion(dll);
+  // test_deletion(dll);
 
-  test_insert_after(dll);
+  // test_insert_after(dll);
 
-  test_insert_idx(dll);
+  // test_insert_idx(dll);
 
-  test_reverse(dll);
+  // test_reverse(dll);
+
+  test_delete_back(dll);
   return 0;
 }

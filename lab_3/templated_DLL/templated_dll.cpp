@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include <initializer_list>
+#include <string>
 
 template <typename T>
 class Node
@@ -212,6 +213,42 @@ public:
     debug_verify_data_integrity();
     return;
   }
+
+  void insert_at_idx(int idx, const T &new_value)
+  {
+    // Handle insertion in empty DLL
+    if (0 == idx && 0 == size)
+    {
+      add(new_value);
+      return;
+    }
+
+    // Assure index is in range
+    assert((0 <= idx && idx < size));
+
+    // Get the current node at idx
+    Node<T> *cur_node = head;
+    for (int i{0}; i < idx; ++i)
+    {
+      cur_node = cur_node->nxt;
+    }
+
+    Node<T> *new_node = new Node<T>{new_value};
+
+    link(cur_node->prv, new_node);
+    link(new_node, cur_node);
+
+    if (head == cur_node)
+    {
+      head = head->prv;
+    }
+
+    ++size;
+
+    debug_verify_data_integrity();
+
+    return;
+  }
 };
 
 template <typename T>
@@ -267,6 +304,32 @@ void test_insert_after(DLL<T> dll)
   return;
 }
 
+template <typename T>
+void test_insert_idx(DLL<T> dll)
+{
+  std::cout << "\n----------------Test Insertion @ idx-------------------\n";
+  std::cout << "Current DLL : ";
+  dll.display();
+  std::cout << std::endl;
+
+  std::cout << "Insert @ head : \n";
+  dll.insert_at_idx(0, "sayed");
+  dll.display();
+  std::cout << std::endl;
+
+  std::cout << "Insert @ tail : \n";
+  dll.insert_at_idx(3, "mazen");
+  dll.display();
+  std::cout << std::endl;
+
+  std::cout << "Insert @ middle (e.g. 3) : \n";
+  dll.insert_at_idx(3, "mahmoud");
+  dll.display();
+  std::cout << std::endl;
+
+  return;
+}
+
 int main()
 {
 
@@ -298,5 +361,7 @@ int main()
   test_deletion(dll);
 
   test_insert_after(dll);
+
+  test_insert_idx(dll);
   return 0;
 }

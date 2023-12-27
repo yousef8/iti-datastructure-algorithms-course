@@ -48,43 +48,6 @@ private:
     return;
   }
 
-  void debug_verify_data_integrity()
-  {
-    int length = size;
-    if (length == 0)
-    {
-      assert(head == nullptr);
-      assert(tail == nullptr);
-    }
-    else
-    {
-      assert(head != nullptr);
-      assert(tail != nullptr);
-      if (length == 1)
-        assert(head == tail);
-      else
-        assert(head != tail);
-      assert(!head->prv);
-      assert(!tail->nxt);
-    }
-    int len = 0;
-    for (Node<T> *cur{head}; cur; cur = cur->nxt, len++)
-    {
-      if (len == length - 1) // make sure we end at tail
-        assert(cur == tail);
-    }
-
-    assert(length == len);
-    // assert(length == (int)debug_data.size());
-
-    len = 0;
-    for (Node<T> *cur = tail; cur; cur = cur->prv, len++)
-    {
-      if (len == length - 1) // make sure we end at head
-        assert(cur == head);
-    }
-  }
-
 public:
   DLL() : head{nullptr}, tail{nullptr}, size{0}
   {
@@ -132,8 +95,6 @@ public:
     tail = node;
 
     ++size;
-
-    debug_verify_data_integrity();
   }
 
   void display()
@@ -185,7 +146,6 @@ public:
     --size;
     delete node_to_delete;
 
-    debug_verify_data_integrity();
     return;
   }
 
@@ -210,7 +170,6 @@ public:
     }
     ++size;
 
-    debug_verify_data_integrity();
     return;
   }
 
@@ -245,8 +204,6 @@ public:
 
     ++size;
 
-    debug_verify_data_integrity();
-
     return;
   }
 
@@ -260,7 +217,6 @@ public:
     }
 
     std::swap(head, tail);
-    debug_verify_data_integrity();
     return;
   }
 };

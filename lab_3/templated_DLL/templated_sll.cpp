@@ -40,6 +40,14 @@ public:
     }
   }
 
+  SLL(SLL<T> &other) : SLL{}
+  {
+    for (Node<T> *cur{other.head}; cur; cur = cur->nxt)
+    {
+      append(cur->data);
+    }
+  }
+
   ~SLL()
   {
     Node<T> *node_to_delete{nullptr};
@@ -183,6 +191,12 @@ int main()
   SLL<std::string> sll{"yousef", "omar", "muhammed"};
   sll.display();
   std::cout << "Is Empty : " << (sll.is_empty() ? "True" : "False") << "\n";
+  std::cout << std::endl;
+
+  std::cout << "------------------Copy SLL By Value---------------------\n";
+  SLL<std::string> sll_cpy{sll};
+  sll_cpy.display();
+  std::cout << "Is Empty : " << (sll_cpy.is_empty() ? "True" : "False") << "\n";
   std::cout << std::endl;
 
   test_search(sll);

@@ -84,7 +84,6 @@ public:
 
   void display()
   {
-    std::cout << "NULL -> ";
     for (Node<T> *cur{head}; cur; cur = cur->nxt)
     {
       std::cout << cur->data << " -> ";

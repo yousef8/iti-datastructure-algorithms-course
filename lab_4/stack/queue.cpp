@@ -58,6 +58,29 @@ public:
     return !(size > 0);
   }
 
+  void reverse()
+  {
+    Node<T> *prv_node{nullptr};
+    Node<T> *cur_node{head};
+    Node<T> *nxt_node{nullptr};
+    while (cur_node)
+    {
+      // Secure access to next node
+      nxt_node = cur_node->nxt;
+
+      // Reverse the node
+      cur_node->nxt = prv_node;
+
+      // Advance the current and previous nodes
+      prv_node = cur_node;
+      cur_node = nxt_node;
+    }
+
+    std::swap(head, tail);
+
+    return;
+  }
+
   void enqueue(const T &data)
   {
     Node<T> *node = new Node<T>{data};
@@ -116,6 +139,10 @@ int main()
 {
   Queue<std::string> queue{"yousef", "omar", "muhammed"};
   std::cout << "Current Queue : ";
+  queue.print();
+
+  std::cout << "Reverse\n";
+  queue.reverse();
   queue.print();
 
   std::cout << "Dequeue the whole queue : \n";

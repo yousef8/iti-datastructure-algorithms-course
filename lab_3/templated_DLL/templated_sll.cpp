@@ -124,6 +124,55 @@ public:
     return nullptr;
   }
 
+  bool erase(const T &search_value)
+  {
+    Node<T> *node_to_del{nullptr};
+    Node<T> *before_del_node{nullptr};
+
+    for (Node<T> *cur{head}; cur && !node_to_del; cur = cur->nxt)
+    {
+      if (search_value == cur->data)
+      {
+        node_to_del = cur;
+      }
+      else
+      {
+        before_del_node = cur;
+      }
+    }
+
+    // No match found
+    if (!node_to_del)
+    {
+      return false;
+    }
+
+    // Match found
+    if (head == node_to_del)
+    {
+      head = node_to_del->nxt;
+    }
+
+    if (tail == node_to_del)
+    {
+      tail = before_del_node;
+      if (tail)
+      {
+        tail->nxt = nullptr;
+      }
+    }
+
+    if (before_del_node)
+    {
+      before_del_node->nxt = node_to_del->nxt;
+    }
+    --size;
+    delete node_to_del;
+
+    debug_verify_data_integrity();
+    return true;
+  }
+
 private:
   Node<T> *head;
   Node<T> *tail;
@@ -154,6 +203,28 @@ private:
     // assert(length == (int)debug_data.size());
   }
 };
+
+template <typename T>
+void test_deletion(SLL<T> sll)
+{
+  std::cout << "-------------------Deletion Feature-------------------------------\n";
+  std::cout << "Delete Middle : \n";
+  sll.erase("omar");
+  sll.display();
+  std::cout << std::endl;
+
+  std::cout << "Delete Head : \n";
+  sll.erase("yousef");
+  sll.display();
+  std::cout << std::endl;
+
+  std::cout << "Delete Tail : \n";
+  sll.erase("muhammed");
+  sll.display();
+  std::cout << std::endl;
+
+  return;
+}
 
 template <typename T>
 void test_search(const SLL<T> &sll)
@@ -200,6 +271,7 @@ int main()
   std::cout << std::endl;
 
   test_search(sll);
+  test_deletion(sll);
 
   return 0;
 }

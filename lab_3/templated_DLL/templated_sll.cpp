@@ -90,6 +90,32 @@ public:
     return (head == nullptr && tail == nullptr);
   }
 
+  Node<T> *search(const T &search_value)
+  {
+    for (Node<T> *cur{head}; cur; cur = cur->nxt)
+    {
+      if (search_value == cur->data)
+      {
+        return cur;
+      }
+    }
+
+    return nullptr;
+  }
+
+  const Node<T> *search(const T &search_value) const
+  {
+    for (Node<T> *cur{head}; cur; cur = cur->nxt)
+    {
+      if (search_value == cur->data)
+      {
+        return cur;
+      }
+    }
+
+    return nullptr;
+  }
+
 private:
   Node<T> *head;
   Node<T> *tail;
@@ -121,6 +147,36 @@ private:
   }
 };
 
+template <typename T>
+void test_search(const SLL<T> &sll)
+{
+  std::cout << "-------------------Search Feature-------------------------------\n";
+  std::cout << "Search for [yousef]\n";
+  const Node<std::string> *res = sll.search("yousef");
+  if (res)
+  {
+    std::cout << "Found [" << res->data << "]\n";
+  }
+  else
+  {
+    std::cout << "No match found\n";
+  }
+  std::cout << std::endl;
+
+  std::cout << "Search for [fathi]\n";
+  res = sll.search("fathi");
+  if (res)
+  {
+    std::cout << "Found [" << res->data << "]\n";
+  }
+  else
+  {
+    std::cout << "No match found\n";
+  }
+  std::cout << std::endl;
+
+  return;
+}
 int main()
 {
   std::cout << "------------------Create SLL & Add Elements---------------------\n";
@@ -128,6 +184,8 @@ int main()
   sll.display();
   std::cout << "Is Empty : " << (sll.is_empty() ? "True" : "False") << "\n";
   std::cout << std::endl;
+
+  test_search(sll);
 
   return 0;
 }

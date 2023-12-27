@@ -249,6 +249,20 @@ public:
 
     return;
   }
+
+  void reverse()
+  {
+    for (Node<T> *cur{head}; cur; cur = cur->prv)
+    {
+      Node<T> *tmp = cur->nxt;
+      cur->nxt = cur->prv;
+      cur->prv = tmp;
+    }
+
+    std::swap(head, tail);
+    debug_verify_data_integrity();
+    return;
+  }
 };
 
 template <typename T>
@@ -330,6 +344,20 @@ void test_insert_idx(DLL<T> dll)
   return;
 }
 
+template <typename T>
+void test_reverse(DLL<T> dll)
+{
+  std::cout << "\n---------------------Test Reverse Feature---------------------------\n";
+  std::cout << "Current DLL : ";
+  dll.display();
+  std::cout << std::endl;
+
+  dll.reverse();
+  std::cout << "DLL Reversed : ";
+  dll.display();
+  std::cout << std::endl;
+}
+
 int main()
 {
 
@@ -363,5 +391,7 @@ int main()
   test_insert_after(dll);
 
   test_insert_idx(dll);
+
+  test_reverse(dll);
   return 0;
 }

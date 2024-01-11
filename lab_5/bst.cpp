@@ -1,4 +1,3 @@
-#include <iomanip>
 #include <iostream>
 
 #define COUNT 3
@@ -84,6 +83,19 @@ class BST {
       return getHeight(root);
     }
 
+    int count(Node<T>* root){
+      if(!root){
+        return 0;
+      }
+
+      return count(root->left) + count(root->right) + 1;
+    }
+
+    int count(){
+      return count(root);
+    }
+
+
     void print2DUtil(Node<T>* root, int space)
     {
         // Base case
@@ -137,6 +149,7 @@ int main() {
     t.insert(45);
 
     t.print();
+    std::cout << "Nodes Count : " <<  t.count() << std::endl;
     std::cout << "Height : " <<  t.getHeight() << std::endl;
     std::cout << "Minimum value is : " << t.getMin() << std::endl;
     std::cout << "Maximum value is : " << t.getMax() << std::endl;

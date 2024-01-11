@@ -95,36 +95,19 @@ class BST {
       return count(root);
     }
 
+    void inOrder(Node<T>* root){
+      if (!root) return;
 
-    void print2DUtil(Node<T>* root, int space)
-    {
-        // Base case
-        if (root == NULL)
-            return;
-     
-        // Increase distance between levels
-        space += COUNT;
-     
-        // Process right child first
-        print2DUtil(root->right, space);
-     
-        // Print current node after space
-        // count
-        std::cout << std::endl;
-        for (int i = COUNT; i < space; i++)
-            std::cout << " ";
-        std::cout << root->data << "";
-     
-        // Process left child
-        print2DUtil(root->left, space);
+      inOrder(root->left);
+      std::cout << root->data << " ";
+      inOrder(root->right);
+      return;
     }
-     
-    // Wrapper over print2DUtil()
-    void print()
-    {
-        // Pass initial space count as 0
-        print2DUtil(root, 0);
-        std::cout << std::endl;
+
+    void inOrder() {
+      inOrder(root);
+      std::cout << std::endl;
+      return;
     }
 
   private:
@@ -147,10 +130,10 @@ int main() {
     t.insert(26);
     t.insert(29);
     t.insert(45);
+    t.inOrder();
 
-    t.print();
     std::cout << "Nodes Count : " <<  t.count() << std::endl;
-    std::cout << "Height : " <<  t.getHeight() << std::endl;
+    std::cout << "Tree Height : " <<  t.getHeight() << std::endl;
     std::cout << "Minimum value is : " << t.getMin() << std::endl;
     std::cout << "Maximum value is : " << t.getMax() << std::endl;
 

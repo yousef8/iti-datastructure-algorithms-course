@@ -48,36 +48,72 @@ class BST {
       return;
     }
 
-  void print2DUtil(Node<T>* root, int space)
-  {
-      // Base case
-      if (root == NULL)
-          return;
-   
-      // Increase distance between levels
-      space += COUNT;
-   
-      // Process right child first
-      print2DUtil(root->right, space);
-   
-      // Print current node after space
-      // count
-      std::cout << std::endl;
-      for (int i = COUNT; i < space; i++)
-          std::cout << " ";
-      std::cout << root->data << "";
-   
-      // Process left child
-      print2DUtil(root->left, space);
-  }
-   
-  // Wrapper over print2DUtil()
-  void print()
-  {
-      // Pass initial space count as 0
-      print2DUtil(root, 0);
-      std::cout << std::endl;
-  }
+    T getMax(Node<T>* root){
+      if (root->right){
+        return getMax(root->right);
+      }
+
+      return root->data;
+    }
+
+    T getMax() {
+      return getMax(root);
+    }
+
+    T getMin(Node<T>* root) {
+      if (root->left){
+        return getMin(root->left);
+      }
+
+      return root->data;
+    }
+
+    T getMin() {
+      return getMin(root);
+    }
+
+    int getHeight(Node<T>* root){
+      if (!root){
+        return -1;
+      }
+
+      return std::max(getHeight(root->left), getHeight(root->right)) + 1;
+    }
+
+    int getHeight(){
+      return getHeight(root);
+    }
+
+    void print2DUtil(Node<T>* root, int space)
+    {
+        // Base case
+        if (root == NULL)
+            return;
+     
+        // Increase distance between levels
+        space += COUNT;
+     
+        // Process right child first
+        print2DUtil(root->right, space);
+     
+        // Print current node after space
+        // count
+        std::cout << std::endl;
+        for (int i = COUNT; i < space; i++)
+            std::cout << " ";
+        std::cout << root->data << "";
+     
+        // Process left child
+        print2DUtil(root->left, space);
+    }
+     
+    // Wrapper over print2DUtil()
+    void print()
+    {
+        // Pass initial space count as 0
+        print2DUtil(root, 0);
+        std::cout << std::endl;
+    }
 
   private:
     Node<T>* root;
@@ -101,6 +137,10 @@ int main() {
     t.insert(45);
 
     t.print();
+    std::cout << "Height : " <<  t.getHeight() << std::endl;
+    std::cout << "Minimum value is : " << t.getMin() << std::endl;
+    std::cout << "Maximum value is : " << t.getMax() << std::endl;
+
 
     return 0;
 }

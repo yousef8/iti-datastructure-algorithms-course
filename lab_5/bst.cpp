@@ -117,6 +117,55 @@ public:
     return parent;
   }
 
+  void deleteNode(T valueDel) {
+    Node<T> *parentNode = getParent(valueDel);
+    Node<T> *nodeDel{nullptr};
+    Node<T> **parentNodeHook{nullptr};
+
+    if (valueDel < parentNode->data) {
+      nodeDel = parentNode->left;
+      parentNodeHook = &parentNode->left;
+    }
+
+    if (valueDel > parentNode->data) {
+      nodeDel = parentNode->right;
+      parentNodeHook = &parentNode->right;
+    }
+
+    // Handle Leaf Node
+    if (!nodeDel->left && !nodeDel->right) {
+      *(parentNodeHook) = nullptr;
+      delete nodeDel;
+      return;
+    }
+
+    // Handle Node with Left Child Only
+    if (!nodeDel->right) {
+      *(parentNodeHook) = nodeDel->left;
+      delete nodeDel;
+      return;
+    }
+
+    // Handle Node with Right Child Only
+    if (!nodeDel->left) {
+      *(parentNodeHook) = nodeDel->right;
+      delete nodeDel;
+      return;
+    }
+
+    *(parentNodeHook) = nodeDel->right;
+    Node<T> *treeTail = *(parentNodeHook);
+
+    while (treeTail->left) {
+      treeTail = treeTail->left;
+    }
+
+    treeTail->left = nodeDel->left;
+    delete nodeDel;
+
+    return;
+  }
+
 private:
   Node<T> *root;
 };
@@ -153,5 +202,17 @@ int main() {
     std::cout << "This node doesn't exist\n";
   }
   std::cout << "****************" << std::endl;
+
+  t.deleteNode(70);
+  t.inOrder();
+  std::cout << "****************" << std::endl;
+
+  t.deleteNode(65);
+  t.inOrder();
+
+  t.deleteNode(30);
+  t.inOrder();
+  std::cout << "****************" << std::endl;
+  std::cout << t.count() << std::endl;
   return 0;
 }

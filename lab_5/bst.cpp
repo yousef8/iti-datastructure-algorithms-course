@@ -94,6 +94,29 @@ public:
     return;
   }
 
+  Node<T> *getParent(T searchData) {
+    Node<T> *searchRoot{root};
+    Node<T> *parent{searchRoot};
+
+    while (searchRoot) {
+      if (searchData == searchRoot->data) {
+        return parent;
+      }
+
+      if (searchData < searchRoot->data) {
+        parent = searchRoot;
+        searchRoot = searchRoot->left;
+      }
+
+      if (searchData > searchRoot->data) {
+        parent = searchRoot;
+        searchRoot = searchRoot->right;
+      }
+    }
+
+    return parent;
+  }
+
 private:
   Node<T> *root;
 };
@@ -121,5 +144,14 @@ int main() {
   std::cout << "Minimum value is : " << t.getMin() << std::endl;
   std::cout << "Maximum value is : " << t.getMax() << std::endl;
 
+  std::cout << "****************" << std::endl;
+  Node<int> *Node = t.getParent(65);
+
+  if (Node) {
+    std::cout << "Parent of 65=" << Node->data << std::endl;
+  } else {
+    std::cout << "This node doesn't exist\n";
+  }
+  std::cout << "****************" << std::endl;
   return 0;
 }

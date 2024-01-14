@@ -117,52 +117,64 @@ public:
     return parent;
   }
 
-  void deleteNode(T valueDel) {
-    Node<T> *parentNode = getParent(valueDel);
-    Node<T> *nodeDel{nullptr};
-    Node<T> **parentNodeHook{nullptr};
+  Node<T> *findMinNode(Node<T> *root) {
+    if (!root->left) {
+      return root;
+    }
+    return findMinNode(root->left);
+  }
 
-    if (valueDel < parentNode->data) {
-      nodeDel = parentNode->left;
-      parentNodeHook = &parentNode->left;
+  Node<T> *deleteNode(Node<T> *root, T valueDel) {
+    if (!root) {
+      return nullptr;
     }
 
-    if (valueDel > parentNode->data) {
-      nodeDel = parentNode->right;
-      parentNodeHook = &parentNode->right;
+    if (valueDel < root->data) {
+      root->left = deleteNode(root->left, valueDel);
+      return root;
     }
+
+    if (valueDel > root->data) {
+      root->right = deleteNode(root->right, valueDel);
+      return root;
+    }
+
+    // We found the node
 
     // Handle Leaf Node
-    if (!nodeDel->left && !nodeDel->right) {
-      *(parentNodeHook) = nullptr;
-      delete nodeDel;
-      return;
+    if (!root->left && !root->right) {
+      delete root;
+      return nullptr;
     }
 
     // Handle Node with Left Child Only
-    if (!nodeDel->right) {
-      *(parentNodeHook) = nodeDel->left;
-      delete nodeDel;
-      return;
+    if (!root->right) {
+      Node<T> *delNode = root;
+      root = root->left;
+      delete delNode;
+      return root;
     }
 
     // Handle Node with Right Child Only
-    if (!nodeDel->left) {
-      *(parentNodeHook) = nodeDel->right;
-      delete nodeDel;
-      return;
+    if (!root->left) {
+      Node<T> *delNode = root;
+      root = root->right;
+      delete delNode;
+      return root;
     }
 
-    *(parentNodeHook) = nodeDel->right;
-    Node<T> *treeTail = *(parentNodeHook);
+    // Handle Node with both children
+    Node<T> *rightSubTreeMinNode = findMinNode(root->right);
+    rightSubTreeMinNode->left = root->left;
 
-    while (treeTail->left) {
-      treeTail = treeTail->left;
-    }
+    Node<T> *delNode = root;
+    root = root->right;
+    delete delNode;
+    return root;
+  }
 
-    treeTail->left = nodeDel->left;
-    delete nodeDel;
-
+  void deleteNode(T valueDel) {
+    root = deleteNode(root, valueDel);
     return;
   }
 
@@ -201,18 +213,30 @@ int main() {
   } else {
     std::cout << "This node doesn't exist\n";
   }
-  std::cout << "****************" << std::endl;
-
+  std::cout << "\n****************" << std::endl;
   t.deleteNode(70);
   t.inOrder();
-  std::cout << "****************" << std::endl;
+  std::cout << "Nodes Count : " << t.count() << std::endl;
 
+  std::cout << "\n****************" << std::endl;
   t.deleteNode(65);
   t.inOrder();
+  std::cout << "Nodes Count : " << t.count() << std::endl;
 
+  std::cout << "\n****************" << std::endl;
   t.deleteNode(30);
   t.inOrder();
-  std::cout << "****************" << std::endl;
-  std::cout << t.count() << std::endl;
+  std::cout << "Nodes Count : " << t.count() << std::endl;
+
+  std::cout << "\n****************" << std::endl;
+  t.deleteNode(50);
+  t.inOrder();
+  std::cout << "Nodes Count : " << t.count() << std::endl;
+
+  std::cout << "\n****************" << std::endl;
+  t.deleteNode(99);
+  t.inOrder();
+  std::cout << "Nodes Count : " << t.count() << std::endl;
+
   return 0;
 }
